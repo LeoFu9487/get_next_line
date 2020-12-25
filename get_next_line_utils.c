@@ -1,20 +1,86 @@
 #include "get_next_line.h"
-
-int     ft_strlen(char *s)
+/*
+char			*ft_strdup(const char *source)
 {
-    int len;
+	char	*ans;
+	int		len;
+	int		i;
 
-    if (!s)
-        return (-1);
-    len = 0;
-    while (s[len] && s[len] != '\n')
-        len++;
-    return (len);
+	while ()
+	if (!(ans = (char*)malloc((len + 1) * sizeof(char))))
+		return (NULL);
+	i = -1;
+	while (++i < len)
+		ans[i] = source[i];
+	ans[i] = '\0';
+	return (ans);
+}
+*/
+char			*ft_substr(char const *s, int start, int len)
+{
+	char	*ans;
+	int     ct;
+
+	ans = (char*)malloc(len * sizeof(char));
+	ct = -1;
+	while (++ct < len)
+        ans[ct] = s[start + ct];
+    ans[ct] = '\0';
+	return (ans);
 }
 
-#include <stdio.h>
-int main()
+void   *ft_str_add(t_lst *dst, char *s, int len)
 {
-    char s[] = "1230";
-    printf("%d\n",ft_strlen(s));
+    t_str   *str;
+    t_str   *temp;
+    int     idx;
+
+    idx = -1;
+    str = (t_str*)malloc(1 * sizeof(t_str));
+    str->next = 0;
+    str->s = (char*)malloc((len + 1) * sizeof(char));
+    while (++idx < len)
+        str->s[idx] = s[idx];
+    str->s[idx] = '\0';
+    temp = dst->str;
+//        printf("Check Point : 4\n");
+
+    if (!temp)
+    {
+        dst->str = str;
+        dst->len = len;
+        return ;
+    }
+    while (temp->next)
+    {
+ //       printf("%p\n",temp);
+        temp = temp->next;
+    }
+
+//            printf("Check Point : 5\n");
+
+    temp->next = str;
+    dst->len += len;
+}
+
+
+t_lst    *ft_lst_add(t_lst **dst, int fd)
+{
+    t_lst    *temp;
+
+    if (!dst)
+        return 0;
+    temp = (t_lst*)malloc(1 * sizeof(t_lst));
+    temp->str = 0;
+    temp->len = 0;
+    temp->fd = fd;
+    temp->next = 0;
+    if (*dst == 0)
+        *dst = temp;
+    else
+    {
+        temp->next = *dst;
+        *dst = temp;
+    }
+    return (temp);
 }
