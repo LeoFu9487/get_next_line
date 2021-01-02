@@ -1,143 +1,129 @@
 #include "get_next_line.h"
 
-int     ft_end(char **line, t_lst *temp, int res, char* buff)
+int	 ft_end(char **line, t_lst *temp, int res, char* buff)
 {
-    // if res == 0 || meet the '\n'
-    int     idx[3];
-    t_str   *str;
+	// if res == 0 || meet the '\n'
+	int	 idx[3];
+	t_str   *str;
 
-    if (temp->len == 0 && res == 0)
-        return (1);
-    idx[0] = -1;
-    while (res && *buff == '\n')
-    {
-        buff++;
-        res--;
-    }
-    while (++idx[0] < res)
-        if (buff[idx[0]] == '\n')
-            break ;
-    if (res == 0 && temp->len == 0)
-        return (0);
-    ft_str_add(temp, buff, idx[0]);
- //           printf("Check Point : 3\n");
+	if (temp->len == 0 && res == 0)
+		return (1);
+	idx[0] = -1;
+	while (res && *buff == '\n')
+	{
+		buff++;
+		res--;
+	}
+	while (++idx[0] < res)
+		if (buff[idx[0]] == '\n')
+			break ;
+	if (res == 0 && temp->len == 0)
+		return (0);
+	if (ft_str_add(temp, buff, idx[0]) == -1)
+		return (-1);
+ //		   printf("Check Point : 3\n");
  //   printf("res : %d\n",temp->len);
-    if (res == 0 || idx[0] < res)
-    {
-        line[0] = (char*)malloc((temp->len + 1) * sizeof(char));
-        idx[1] = -1;
-        idx[2] = 0;
-        str = temp->str;
-        while (++idx[1] < temp->len)
-        {
-            if (!(str->s[idx[2]]))
-            {
-                idx[2] = 0; // need to free
-                str = str->next;
-            }
-            line[0][idx[1]] = str->s[idx[2]++];
-        }
-        line[0][idx[1]] = '\0';
-        //ft_free(temp);
-        temp->str->s = ft_substr(buff, idx[0], res - idx[0]);
-        temp->len = res - idx[0];
-        return (1);
-    }
-    return (0);
+	if ((temp->len > 0 && res != BUFFER_SIZE)|| idx[0] < res)
+	{
+		if (!(line[0] = (char*)malloc((temp->len - temp->idx + 1) * sizeof(char))))
+			return (-1);
+		idx[1] = -1;
+		idx[2] = temp->idx;
+		str = temp->str;
+		while (++idx[1] < temp->len - temp->idx)
+		{
+			if (!(str->s[idx[2]]))
+			{
+				idx[2] = 0; // need to free
+				str = str->next;
+			}
+			line[0][idx[1]] = str->s[idx[2]++];
+		}
+		line[0][idx[1]] = '\0';
+		ft_clean_lst(temp);
+		if (ft_str_add(temp, ft_substr(buff, idx[0], res - idx[0]), res - idx[0]) == -1)
+			return (-1);
+		return (1);
+	}
+	return (0);
 }
 
-int     ft_check(t_lst *temp, char **line)
+int	 ft_check(t_lst *temp, char **line)
 {
-    int ct;
+	int ct;
 
-    while (temp->len > 0 && *(temp->str->s) == '\n')
-    {
-        (temp->len)--;
-        (temp->str->s)++;
-    }
-    ct = -1;
-    while (++ct < temp->len)
-    {
-        if (temp->str->s[ct] == '\n')
-            break ;
-    }
-    if (ct == 0)
-    {
-        temp->str = 0; // need to free
-        return (0);
-    }
-    if (ct < temp->len) // otherwise we just leave the buffer
-    {
-        line[0] = ft_substr(temp->str->s, 0, ct);
-        //ft_free(temp);
+	while (temp->len > 0 && temp->str->s[temp->idx] == '\n')
+		(temp->idx)++;
+	ct = -1;
+	while (++ct + (temp->idx) < (temp->len))
+	{
+		if (temp->str->s[ct + temp->idx] == '\n')
+			break ;
+	}
+	if (ct == 0)
+	{
+		ft_clean_lst(temp); // need to free
+		return (0);
+	}
+	if (ct + temp->idx < temp->len) // otherwise we just leave the buffer
+	{
+		line[0] = ft_substr(temp->str->s, temp->idx, ct);
+		//ft_free(temp);
+		while ((temp->idx) < (temp->len) && temp->str->s[temp->idx] == '\n')
+			(temp->idx)++;
 
-        (temp->str->s) += ct;
-        (temp->len) -= ct;
-
-        while (temp->len && *(temp->str->s) == '\n')
-        {
-            (temp->len)--;
-            (temp->str->s)++;
-        }
-        if (temp->len == 0)
-            temp->str->s = 0;
-        //printf("%s\n", line[0]);
-        return (1);
-    }
-    return (0);
+		if (temp->len == temp->idx)
+			ft_clean_lst(temp);
+		//printf("%s\n", line[0]);
+		return (1);
+	}
+	return (0);
 }
 
-int     get_next_line(int fd, char **line)
+int	 get_next_line(int fd, char **line)
 {
-    char                buff[BUFFER_SIZE + 1];
-    static  t_lst       *save;
-    t_lst               *temp;
-    int                 res;
+	char				buff[BUFFER_SIZE + 1];
+	static  t_lst	   *save;
+	t_lst			   *temp;
+	int				 res[2];
 
-    if  (fd < 0 || BUFFER_SIZE < 1 || !line)
-        return(-1);
-    temp = save;
-    while (temp)
-    {
-        if (temp->fd == fd)
-            break ;
-        temp = temp->next;
-    }
-    if (!temp)
-    {
-        temp = ft_lst_add(&save, fd);
-    }
+	if  (fd < 0 || BUFFER_SIZE < 1 || !line)
+		return(-1);
+	temp = save;
+	while (temp)
+	{
+		if (temp->fd == fd)
+			break ;
+		temp = temp->next;
+	}
+	if (!temp && !(temp = ft_lst_add(&save, fd)))
+	{
+		return (-1);
+	}
 
-    if (ft_check(temp, line))
-    {
-        return (1);
-    }
-//    printf("Check Point : 1\n");
-    while (1)
-    {
-        res = read(fd, buff, BUFFER_SIZE);
-        //printf("%s\n%d\n",buff,res);
-        if (res == -1)
-            return (-1);
-        buff[res] = '\0';
-        //printf("%s\n",buff);
-//        printf("Check Point : 2\n");
-        if (ft_end(line, temp, res, (char*)buff))
-            break ;
-    }
-    if (res == 0 && temp->len == 0)
-        return (0);
-    //printf("%d\n", temp->len);
-    return (1);
+	if (ft_check(temp, line))
+	{
+		return (1);
+	}
+//	printf("Check Point : 1\n");
+	*line = 0;
+	while (1)
+	{
+		res[0] = read(fd, buff, BUFFER_SIZE);
+		//printf("%s\n%d\n",buff,res);
+		if (res[0] == -1)
+			return (-1);
+		buff[res[0]] = '\0';
+		//printf("%s\n",buff);
+//		printf("Check Point : 2\n");
+		res[1] = ft_end(line, temp, res[0], (char*)buff);
+		if (res[1] == -1)
+			return (-1);
+		if (res[1] == 1)
+			break ;
+	}
+   return (*line != 0);
 }
-/*
-need to have a function to free everything
-*/
-
-/*
-protection for malloc
-*/
-
 /*
 Do I need to put static for the functions?
 */
@@ -146,11 +132,12 @@ Do I need to put static for the functions?
 When Do i need to return 0?
 */
 /*
-Deal with an empty file
-*/
-/*
 Check if the buffer size is correct
 */
 /*
 norm
+*/
+/*
+How can I free save ?
+
 */
