@@ -22,7 +22,7 @@ typedef struct  s_lst
     struct  s_lst      *next;
 }               t_lst;
 
-int         ft_check(t_lst *temp, char **line);
+int         ft_check(t_lst *temp, char **linew);
 int         get_next_line(int fd, char **line);
 t_lst       *ft_lst_add(t_lst **dst, int fd);
 void        *ft_str_add(t_lst *dst, char *s, int len);

@@ -21,7 +21,7 @@ char			*ft_substr(char const *s, int start, int len)
 	char	*ans;
 	int     ct;
 
-	ans = (char*)malloc(len * sizeof(char));
+	ans = (char*)malloc((len + 1) * sizeof(char)); // should I +1?
 	ct = -1;
 	while (++ct < len)
         ans[ct] = s[start + ct];
@@ -68,8 +68,6 @@ t_lst    *ft_lst_add(t_lst **dst, int fd)
 {
     t_lst    *temp;
 
-    if (!dst)
-        return 0;
     temp = (t_lst*)malloc(1 * sizeof(t_lst));
     temp->str = 0;
     temp->len = 0;
