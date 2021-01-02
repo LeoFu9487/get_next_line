@@ -1,21 +1,5 @@
 #include "get_next_line.h"
-/*
-char			*ft_strdup(const char *source)
-{
-	char	*ans;
-	int		len;
-	int		i;
 
-	while ()
-	if (!(ans = (char*)malloc((len + 1) * sizeof(char))))
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		ans[i] = source[i];
-	ans[i] = '\0';
-	return (ans);
-}
-*/
 char			*ft_substr(char const *s, int start, int len)
 {
 	char	*ans;

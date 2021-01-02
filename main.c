@@ -18,28 +18,25 @@ int main()
     char **ans2 = (char**)malloc(1 * sizeof(char*));
     char **ans3 = (char**)malloc(1 * sizeof(char*));
     int flag = 1;
-    if (get_next_line(fd3, ans3))
+    /*if (get_next_line(fd3, ans3))
         printf("%s\n", *ans3);
-    else printf("NO\n");
+    else printf("NO\n");*/
+    printf("%d\n", BUFFER_SIZE);
     while (flag)
     {
         flag = 0;
-        /*if (get_next_line(fd1, ans1))
+        if (get_next_line(fd1, ans1))
         {
-
             flag = 1;
-        }*/
+            printf("fd1 : %s\n", *ans1);
+        }
         if (get_next_line(fd2, ans2))
         {
             flag = 1;
-            printf("%s\n", ans2[0]);
+            printf("fd2 : %s\n", *ans2);
         }
-        //printf("%s\n",ans1[0]);
-        //printf("%s\n", ans2[0]);
-        else printf("NO\n");
+
     }
- //   printf("%s\n",ans1[0]);
-//    printf("%s\n", ans2[0]);
     close(fd1);
     close(fd2);
 }

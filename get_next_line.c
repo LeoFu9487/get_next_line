@@ -17,8 +17,9 @@ int     ft_end(char **line, t_lst *temp, int res, char* buff)
     while (++idx[0] < res)
         if (buff[idx[0]] == '\n')
             break ;
-    if (idx[0] > 0)
-        ft_str_add(temp, buff, idx[0]);
+    if (res == 0 && temp->len == 0)
+        return (0);
+    ft_str_add(temp, buff, idx[0]);
  //           printf("Check Point : 3\n");
  //   printf("res : %d\n",temp->len);
     if (res == 0 || idx[0] < res)
@@ -111,7 +112,6 @@ int     get_next_line(int fd, char **line)
     {
         return (1);
     }
-
 //    printf("Check Point : 1\n");
     while (1)
     {
@@ -143,15 +143,14 @@ Do I need to put static for the functions?
 */
 
 /*
-think about one buffer, lots of '\n'
-*/
-
-/*
-Is the moment that return 0 correct?
-*/
-/*
-Deal with a file with only '\n'
+When Do i need to return 0?
 */
 /*
 Deal with an empty file
+*/
+/*
+Check if the buffer size is correct
+*/
+/*
+norm
 */
