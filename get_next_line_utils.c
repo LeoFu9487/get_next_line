@@ -87,3 +87,25 @@ void	ft_clean_lst(t_lst *lst)
 	}
 	lst->str = 0;
 }
+
+int	 ft_del_lst(t_lst *target, t_lst **head)
+{
+	t_lst   *temp;
+
+	if (target == *head)
+	{   if (target->str)
+			free(target->str);
+		if (target->next)
+			*head = target->next;
+		free(target);
+		return (0);
+	}
+	temp = *head;
+	while (temp->next != target)
+		temp = temp->next;
+	temp->next = target->next;
+	if (target->str)
+		free(target->str);
+	free(target);
+	return (0);
+}
