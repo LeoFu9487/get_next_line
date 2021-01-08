@@ -7,9 +7,12 @@ char			*ft_substr(char const *s, int start, int len)
 
 	if (!(ans = (char*)malloc((len + 1) * sizeof(char))))
 		return (NULL);
-	ct = -1;
-	while (++ct < len)
+	ct = 0;
+	while (ct < len && s[ct] != '\0')
+	{
 		ans[ct] = s[start + ct];
+		ct++;
+	}
 	ans[ct] = '\0';
 	return (ans);
 }
@@ -20,6 +23,8 @@ int   ft_str_add(t_lst *dst, char *s, int len)
 	t_str   *temp;
 	int	 idx;
 
+	if (len < 0)
+		return (-1);
 	if (!s || !(str = (t_str*)malloc(1 * sizeof(t_str))))
 		return (-1);
 	idx = -1;
@@ -97,6 +102,8 @@ int	 ft_del_lst(t_lst *target, t_lst **head)
 			free(target->str);
 		if (target->next)
 			*head = target->next;
+		else
+			*head = 0;
 		free(target);
 		return (0);
 	}

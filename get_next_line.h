@@ -4,10 +4,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-#   ifndef BUFFER_SIZE
-#   define BUFFER_SIZE 1000
-#   endif
-
 typedef struct	s_str
 {
 	char			*s;
