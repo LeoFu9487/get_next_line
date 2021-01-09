@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# define BUFFER_SIZE 42
+
 typedef struct	s_str
 {
 	char			*s;
@@ -23,7 +25,9 @@ int		get_next_line(int fd, char **line);
 t_lst	*ft_lst_add(t_lst **dst, int fd);
 int		ft_str_add(t_lst *dst, char *s, int len);
 char	*ft_substr(char const *s, int start, int len);
-void	ft_clean_lst(t_lst *lst);
-int		ft_del_lst(t_lst *target, t_lst **head);
+int	    ft_clean_lst(t_lst *lst);
+int		ft_del_lst(t_lst *target, t_lst **head, int *res);
+
+//check the .h
 
 #endif
