@@ -1,20 +1,16 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yfu <marvin@42.fr>                         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/08 10:23:59 by yfu               #+#    #+#             */
-/*   Updated: 2021/01/08 15:24:37 by yfu              ###   ########lyon.fr   */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   get_next_line.c									:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: yfu <marvin@42.fr>						 +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2021/01/08 10:23:59 by yfu			   #+#	#+#			 */
+/*   Updated: 2021/01/08 15:24:37 by yfu			  ###   ########lyon.fr   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-//remember to change the header for the bonus
-
-#include <stdio.h>
-//delete this header
 
 void	ft_fill(char **line, t_lst *temp)
 {
@@ -57,7 +53,7 @@ int	 ft_end(char **line, t_lst *temp, int res, char* buff)
 	if (res != BUFFER_SIZE || idx[0] < res)
 	{
 		if (!(line[0] =
-        (char*)malloc((temp->len - temp->idx + 1) * sizeof(char))))
+		(char*)malloc((temp->len - temp->idx + 1) * sizeof(char))))
 			return (-1);
 		ft_fill(line, temp);
 		if (res == idx[0])
@@ -89,10 +85,25 @@ int	 ft_check(t_lst *temp, char **line, t_lst *save)
 		line[0] = ft_substr(temp->str->s, temp->idx, ct[0]);
 		(temp->idx) += ct[0] + 1;
 		if (temp->len == temp->idx)
-            ft_del_lst(temp, &save, (int*)ct);
+			ft_del_lst(temp, &save, (int*)ct);
 		return (1);
 	}
 	return (0);
+}
+
+void	ft_gnl(int *res, char *buff, char **line, t_lst *temp)
+{
+	res[0] = read(res[2], buff, BUFFER_SIZE);
+	if (res[0] == -1)
+	{
+		res[1] = -1;
+		return ;
+	}
+	buff[res[0]] = '\0';
+	res[1] = ft_end(line, temp, res[0], (char*)buff);
+	if (res[1] == 1 || res[1] == 2 || res[0] == 0)
+		if (*line == 0)
+			*line = ft_substr("", 0, 0);
 }
 
 int	 get_next_line(int fd, char **line)
@@ -100,7 +111,7 @@ int	 get_next_line(int fd, char **line)
 	char				buff[BUFFER_SIZE + 1];
 	static t_lst		*save;
 	t_lst				*temp;
-	int					res[2];
+	int					res[3];
 
 	if  (fd < 0 || BUFFER_SIZE < 1 || !line)
 		return(-1);
@@ -112,23 +123,14 @@ int	 get_next_line(int fd, char **line)
 	*line = 0;
 	if (ft_check(temp, line, save))
 		return (1);
+	res[2] =  fd;
 	while (1)
 	{
-		res[0] = read(fd, buff, BUFFER_SIZE);
-		if (res[0] == -1)
-			return (-1);
-		buff[res[0]] = '\0';
-		res[1] = ft_end(line, temp, res[0], (char*)buff);
-		if (res[1] == -1)
+		ft_gnl((int*)res, buff, line, temp);
+		if (res[0] == -1 || res[1] == -1)
 			return (ft_del_lst(temp, &save, (int*)res));
 		if (res[1] == 1 || res[1] == 2 || res[0] == 0)
 			break ;
 	}
-	if (*line == 0)
-		*line = ft_substr("", 0, 0);
 	return (ft_del_lst(temp, &save, (int*)res));
 }
-
-/*
-norm
-*/

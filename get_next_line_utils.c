@@ -90,10 +90,10 @@ int	 ft_del_lst(t_lst *target, t_lst **head, int *res)
 	t_lst   *temp;
 
 	if (res[1] != -1 && target->len)
-        return (1);
+		return (1);
 	if (target == *head)
 	{   if (target->str)
-            ft_clean_lst(target);
+			ft_clean_lst(target);
 		if (target->next)
 			*head = target->next;
 		else
