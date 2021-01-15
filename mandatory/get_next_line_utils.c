@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yfu <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/15 17:08:54 by yfu               #+#    #+#             */
+/*   Updated: 2021/01/15 17:09:01 by yfu              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-char			*ft_substr(char const *s, int start, int len)
+char	*ft_substr(char const *s, int start, int len)
 {
 	char	*ans;
-	int	 ct;
+	int		ct;
 
 	if (!(ans = (char*)malloc((len + 1) * sizeof(char))))
 		return (NULL);
@@ -17,11 +29,11 @@ char			*ft_substr(char const *s, int start, int len)
 	return (ans);
 }
 
-int   ft_str_add(t_lst *dst, char *s, int len)
+int		ft_str_add(t_lst *dst, char *s, int len)
 {
-	t_str   *str;
-	t_str   *temp;
-	int	 idx;
+	t_str	*str;
+	t_str	*temp;
+	int		idx;
 
 	if (len < 0 || !s || !(str = (t_str*)malloc(1 * sizeof(t_str))))
 		return (-1);
@@ -46,7 +58,6 @@ int   ft_str_add(t_lst *dst, char *s, int len)
 	return (1);
 }
 
-
 t_lst	*ft_lst_add(t_lst **dst, int fd)
 {
 	t_lst	*temp;
@@ -68,9 +79,9 @@ t_lst	*ft_lst_add(t_lst **dst, int fd)
 	return (temp);
 }
 
-int	ft_clean_lst(t_lst *lst)
+int		ft_clean_lst(t_lst *lst)
 {
-	t_str   *temp;
+	t_str	*temp;
 
 	lst->idx = 0;
 	lst->len = 0;
@@ -85,14 +96,15 @@ int	ft_clean_lst(t_lst *lst)
 	return (0);
 }
 
-int	 ft_del_lst(t_lst *target, t_lst **head, int *res)
+int		ft_del_lst(t_lst *target, t_lst **head, int *res)
 {
-	t_lst   *temp;
+	t_lst	*temp;
 
 	if (res[1] != -1 && target->len)
 		return (1);
 	if (target == *head)
-	{   if (target->str)
+	{
+		if (target->str)
 			ft_clean_lst(target);
 		if (target->next)
 			*head = target->next;
