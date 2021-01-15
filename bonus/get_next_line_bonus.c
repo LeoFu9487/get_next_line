@@ -5,6 +5,7 @@ void	ft_fill(char **line, t_lst *temp)
 	int 	idx[2];
 	t_str	*str;
 
+	//malloc not protected
 	*line = (char*)malloc(((temp->len) - (temp->idx) + 1) * sizeof(char));
 	idx[0] = temp->idx;
 	idx[1] = 0;
@@ -22,10 +23,13 @@ void	ft_fill(char **line, t_lst *temp)
 	ft_clean_lst(temp);
 }
 
+#include <stdio.h>
+
 int	 ft_end(char **line, t_lst *temp, int res, char* buff)
 {
 	int	 idx[3];
 
+	//printf("cp0\n");
 	if (res == 0 && temp->len == 0)
 		return (1);
 	idx[0] = 0;
@@ -40,14 +44,17 @@ int	 ft_end(char **line, t_lst *temp, int res, char* buff)
 		return (-1);
 	if (res != BUFFER_SIZE || idx[0] < res)
 	{
-		if (!(line[0] =
-		(char*)malloc((temp->len - temp->idx + 1) * sizeof(char))))
-			return (-1);
+		//if (!(line[0] =
+		//(char*)malloc((temp->len - temp->idx + 1) * sizeof(char))))
+		//	return (-1);
 		ft_fill(line, temp);
 		if (res == idx[0])
 			return (2);
-		return (ft_str_add(temp, ft_substr(buff, idx[0] + 1, res - idx[0] - 1), res - idx[0] - 1));
+		//return (1);
+		//buff[idx[0] + 1]
+		return (ft_str_add(temp, buff + idx[0] + 1, res - idx[0] - 1));
 	}
+	
 	return (0);
 }
 
@@ -94,6 +101,8 @@ void	ft_gnl(int *res, char *buff, char **line, t_lst *temp)
 			*line = ft_substr("", 0, 0);
 }
 
+#include <stdio.h>
+
 int	 get_next_line(int fd, char **line)
 {
 	char				buff[BUFFER_SIZE + 1];
@@ -120,5 +129,7 @@ int	 get_next_line(int fd, char **line)
 		if (res[1] == 1 || res[1] == 2 || res[0] == 0)
 			break ;
 	}
+	printf("len : %d\n", temp->len);
+	//printf("add : %p	%p	%p	%p\n", temp, save, temp->str, temp->str->s);
 	return (ft_del_lst(temp, &save, (int*)res));
 }

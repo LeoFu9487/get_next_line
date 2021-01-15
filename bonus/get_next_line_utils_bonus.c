@@ -17,12 +17,15 @@ char			*ft_substr(char const *s, int start, int len)
 	return (ans);
 }
 
+#include <stdio.h>
+
 int   ft_str_add(t_lst *dst, char *s, int len)
 {
 	t_str   *str;
 	t_str   *temp;
 	int	 idx;
 
+	printf("cp1\n");
 	if (len < 0 || !s || !(str = (t_str*)malloc(1 * sizeof(t_str))))
 		return (-1);
 	idx = -1;
@@ -35,10 +38,12 @@ int   ft_str_add(t_lst *dst, char *s, int len)
 	temp = dst->str;
 	if (!temp)
 	{
+		printf("cp2\n");
 		dst->str = str;
 		dst->len = len;
 		return (1);
 	}
+	printf("cp3\n");
 	while (temp->next)
 		temp = temp->next;
 	temp->next = str;
